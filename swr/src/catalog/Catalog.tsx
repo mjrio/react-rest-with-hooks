@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import useSWR, { mutate } from "swr";
+import { useQuery } from '../api/useQuery';
 
 import ProductCard from "../components/ProductCard";
 import Navbar from "../components/Navbar";
@@ -31,6 +32,9 @@ export default () => {
   let [page, setPage] = useState(0);
   let [selectedProduct, setSelectedProduct] = useState();
   let { data } = useSWR<IProductResult>(getProductsUrl(page, 20), fetcher);
+
+  const url = `products?page=${page}&pageSize=20`;
+  const { data, isLoading } = useQuery<IProductResult>(url);
 
   const confirmProduct = async (updatedProduct: IProduct) => {
     // Save product (with Fetch in this case)
